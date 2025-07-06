@@ -187,17 +187,17 @@ ec_sync_info_t slave_2_syncs[] = {
 
 /****************************************************************************/
 
-void check_domain1_state(void)
+void inline check_domain1_state(void)
 {
     ec_domain_state_t ds;
 
     ecrt_domain_state(domain1, &ds);
 
     if (ds.working_counter != domain1_state.working_counter) {
-        printf("Domain1: WC %u.\n", ds.working_counter);
+        std::cout << "Domain1: WC " << ds.working_counter << "." << std::endl;
     }
     if (ds.wc_state != domain1_state.wc_state) {
-        printf("Domain1: State %u.\n", ds.wc_state);
+        std::cout << "Domain1: State " << ds.wc_state << "." << std::endl;
     }
 
     domain1_state = ds;
@@ -205,7 +205,7 @@ void check_domain1_state(void)
 
 /****************************************************************************/
 
-void check_master_state(void)
+void inline check_master_state(void)
 {
     ec_master_state_t ms;
 
@@ -226,7 +226,7 @@ void check_master_state(void)
 
 /****************************************************************************/
 
-void stack_prefault(void)
+void inline stack_prefault(void)
 {
     unsigned char dummy[MAX_SAFE_STACK];
 
@@ -235,14 +235,14 @@ void stack_prefault(void)
 
 /****************************************************************************/
 
-int MS_TO_COUNTER(int ms)
+int inline MS_TO_COUNTER(int ms)
 {
     return (ms * FREQUENCY) / 1000;
 }
 
 /****************************************************************************/
 
-void cyclic_task(){
+void inline cyclic_task(){
     /* Receive process data*/
     ecrt_master_receive(master);
     ecrt_domain_process(domain1);
@@ -292,6 +292,9 @@ void cyclic_task(){
 /****************************************************************************/
 
 int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
     ec_slave_config_t *sc;
     struct timespec wakeup_time;
     int ret = 0;
